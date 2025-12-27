@@ -196,7 +196,7 @@ function displayWeather(weatherData) {
     $('#humidity').text(`${humidity}%`);
     $('#wind-speed').text(`${windSpeed}km/h`);
     $('#weather-icon-img').attr('src', getWeatherIconUrl(iconCode));
-    $('#weather-icon-img').attr('alt', description);
+    $('#weather-icon-img').attr('alt', `${cityName} 지역의 현재 날씨: ${description}, 온도 ${temp}°C`);
 
     // 옷차림 추천
     const recommendation = getClothingRecommendation(temp);
@@ -207,7 +207,9 @@ function displayWeather(weatherData) {
     $('#recommendation-text').text(recommendationText);
     
     // 추천 이미지 표시 (온도별 이미지)
-    $('#recommendation-image').attr('src', 'images/' + recommendation.image);
+    const imageAlt = `${temp}°C 날씨에 맞는 옷차림 추천 이미지 - ${recommendation.text}`;
+    $('#recommendation-image').attr('src', 'assets/images/' + recommendation.image);
+    $('#recommendation-image').attr('alt', imageAlt);
     $('#recommendation-image').removeClass('hidden');
     
     // 추천 팁 추가
@@ -227,7 +229,9 @@ function displayWeather(weatherData) {
         minute: '2-digit',
         second: '2-digit'
     });
+    const isoDateTime = now.toISOString();
     $('#update-time').text(timeString);
+    $('#update-time').attr('datetime', isoDateTime);
 
     // 온도 선택 드롭다운을 'auto'로 설정
     $('#temperature-preview').val('auto');
@@ -330,7 +334,9 @@ function previewClothingByTemperature(temperature) {
     $('#recommendation-text').text(recommendationText);
     
     // 온도별 이미지 표시
-    $('#recommendation-image').attr('src', 'images/' + recommendation.image);
+    const imageAlt = `${temp}°C 날씨에 맞는 옷차림 추천 이미지 - ${recommendation.text}`;
+    $('#recommendation-image').attr('src', 'assets/images/' + recommendation.image);
+    $('#recommendation-image').attr('alt', imageAlt);
     $('#recommendation-image').removeClass('hidden');
     
     // 배경색 설정
