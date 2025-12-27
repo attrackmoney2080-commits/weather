@@ -1,0 +1,704 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    transition: background-color 0.8s ease;
+    background: linear-gradient(135deg, #E8F4F8 0%, #f0f9ff 100%);
+    padding: 20px;
+    position: relative;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+}
+
+/* 다크모드 대응 */
+@media (prefers-color-scheme: dark) {
+    header h1 {
+        background: linear-gradient(135deg, #8b9aff 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .subtitle {
+        color: #b0b0b0;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 광고 영역 */
+#top-ad-space {
+    max-width: 728px;
+    width: 100%;
+    margin: 0 auto 30px;
+    min-height: 90px;
+}
+
+#mid-ad-space {
+    max-width: 300px;
+    width: 100%;
+    margin: 30px auto;
+    min-height: 250px;
+}
+
+.ad-placeholder {
+    background-color: #f0f0f0;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+}
+
+/* 메인 컨테이너 */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 200px);
+}
+
+.weather-card {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5);
+    padding: 45px;
+    max-width: 550px;
+    width: 100%;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    animation: fadeIn 0.8s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.weather-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 로딩 상태 */
+.loading {
+    padding: 60px 20px;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .loading {
+        color: #b0b0b0;
+    }
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+/* 날씨 정보 */
+.weather-info {
+    margin-bottom: 30px;
+    animation: slideUp 0.6s ease-out;
+}
+
+.city-name {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.city-name::before {
+    content: '📍';
+    font-size: 1.2rem;
+}
+
+.temperature-container {
+    margin: 25px 0;
+}
+
+.temperature {
+    font-size: 5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.feels-like {
+    font-size: 0.95rem;
+    color: #777;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+.weather-description {
+    font-size: 1.3rem;
+    color: #555;
+    margin: 25px 0;
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-radius: 20px;
+    display: inline-block;
+}
+
+@media (prefers-color-scheme: dark) {
+    .weather-description {
+        color: #d0d0d0;
+        background: linear-gradient(135deg, rgba(139, 154, 255, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
+    }
+}
+
+.weather-icon {
+    margin: 25px 0;
+    animation: fadeIn 1s ease-out;
+}
+
+.weather-icon img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)) brightness(1.5) contrast(1.2);
+}
+
+/* 맑은 날씨 아이콘을 밝은 노란색 해로 변경 */
+.weather-icon img[src*="01d"],
+.weather-icon img[src*="01n"] {
+    filter: drop-shadow(0 4px 8px rgba(255, 200, 0, 0.3)) 
+            brightness(2) 
+            sepia(1) 
+            hue-rotate(-15deg) 
+            saturate(2) 
+            contrast(1.2);
+}
+
+.weather-details {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detail-label {
+    font-size: 0.9rem;
+    color: #888;
+    font-weight: 400;
+}
+
+.detail-value {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+    .detail-label {
+        color: #b0b0b0;
+    }
+    
+    .detail-value {
+        color: #e0e0e0;
+    }
+}
+
+/* 옷차림 추천 */
+.clothing-recommendation {
+    margin-top: 35px;
+    padding-top: 35px;
+    border-top: 2px solid #eee;
+    animation: slideUp 0.8s ease-out;
+}
+
+.clothing-recommendation h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.temperature-selector {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.temperature-selector label {
+    font-size: 0.95rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.temperature-select {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 250px;
+    outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .temperature-selector label {
+        color: #d0d0d0;
+    }
+    
+    .temperature-select {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+        border-color: #8b9aff;
+    }
+}
+
+.temperature-select:hover {
+    border-color: #764ba2;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.temperature-select:focus {
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.recommendation-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.recommendation-image-container {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.recommendation-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.recommendation-text-container {
+    width: 100%;
+}
+
+.recommendation-text {
+    font-size: 1.15rem;
+    line-height: 2;
+    color: #2d3748;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 25px;
+    border-radius: 16px;
+    border-left: 5px solid #667eea;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .recommendation-text {
+        color: #e0e0e0;
+        background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .recommendation-text {
+        color: #e0e0e0;
+        background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+}
+
+.recommendation-tip {
+    font-size: 0.95rem;
+    color: #666;
+    padding: 15px;
+    background-color: #fff9e6;
+    border-radius: 12px;
+    border-left: 4px solid #ffc107;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .recommendation-tip {
+        color: #d0d0d0;
+        background-color: #3a3a2a;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .recommendation-tip {
+        color: #d0d0d0;
+        background-color: #3a3a2a;
+    }
+}
+
+.tip-item {
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.tip-item:last-child {
+    margin-bottom: 0;
+}
+
+.tip-item::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #ffc107;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.info-section {
+    margin-top: 35px;
+    padding-top: 35px;
+    border-top: 2px solid #eee;
+    animation: fadeIn 1s ease-out;
+}
+
+.info-card {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    padding: 25px;
+    border-radius: 16px;
+    text-align: left;
+}
+
+.info-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.info-card p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.info-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-card ul li {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.8;
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.info-card ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #667eea;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    footer {
+        color: #b0b0b0;
+    }
+}
+
+.update-time {
+    margin-top: 8px;
+    font-size: 0.8rem;
+}
+
+/* 에러 메시지 */
+.error-message {
+    padding: 35px 25px;
+    color: #d32f2f;
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    border-radius: 16px;
+    border-left: 5px solid #d32f2f;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.1);
+    animation: slideUp 0.6s ease-out;
+}
+
+.error-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.error-message p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    font-weight: 500;
+}
+
+/* 기온별 배경색 클래스 */
+body.hot {
+    background: linear-gradient(135deg, #FFF4E6 0%, #FFE5CC 100%);
+}
+
+body.warm {
+    background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+}
+
+body.mild {
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+}
+
+body.cold {
+    background: linear-gradient(135deg, #E8F4F8 0%, #E1F5FE 100%);
+}
+
+/* 유틸리티 클래스 */
+.hidden {
+    display: none !important;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .weather-card {
+        padding: 30px 20px;
+        margin: 0 10px;
+    }
+
+    .temperature {
+        font-size: 3rem;
+    }
+
+    .weather-icon img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .city-name {
+        font-size: 1.3rem;
+    }
+
+    .weather-description {
+        font-size: 1.1rem;
+    }
+
+    .recommendation-text {
+        font-size: 1rem;
+        padding: 15px;
+    }
+
+    .weather-details {
+        gap: 30px;
+    }
+
+    .temperature {
+        font-size: 4rem;
+    }
+
+    #top-ad-space {
+        min-height: 70px;
+        margin-bottom: 20px;
+    }
+
+    #mid-ad-space {
+        min-height: 200px;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.3rem;
+    }
+
+    .weather-card {
+        padding: 25px 15px;
+    }
+
+    .temperature {
+        font-size: 2.5rem;
+    }
+
+    .weather-icon img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .clothing-recommendation h2 {
+        font-size: 1.1rem;
+    }
+
+    .recommendation-text {
+        font-size: 0.95rem;
+        padding: 12px;
+    }
+
+    .recommendation-content {
+        gap: 12px;
+    }
+
+    .recommendation-image-container {
+        max-width: 200px;
+    }
+
+    .temperature-selector {
+        padding: 12px;
+    }
+
+    .temperature-select {
+        min-width: 180px;
+        font-size: 0.85rem;
+        padding: 8px 15px;
+    }
+
+    .temperature-selector label {
+        font-size: 0.85rem;
+    }
+
+    .weather-details {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .city-name {
+        font-size: 1.4rem;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+}
+
