@@ -217,9 +217,20 @@ function displayWeather(weatherData) {
     $('#recommendation-text').text(recommendationText);
     
     const imageAlt = `${temp}°C 날씨에 맞는 옷차림 추천 이미지 - ${recommendation.text}`;
-    $('#recommendation-image').attr('src', 'assets/images/' + recommendation.image);
-    $('#recommendation-image').attr('alt', imageAlt);
-    $('#recommendation-image').removeClass('hidden');
+    const imageSrc = 'assets/images/' + recommendation.image;
+    const $img = $('#recommendation-image');
+    $img.attr('src', imageSrc);
+    $img.attr('alt', imageAlt);
+    $img.off('load error').on('load', function() {
+        $(this).removeClass('hidden').css('display', 'block');
+    }).on('error', function() {
+        console.error('이미지를 로드할 수 없습니다:', imageSrc);
+        $(this).addClass('hidden');
+    });
+    // 이미지가 이미 캐시에 있는 경우를 대비
+    if ($img[0].complete && $img[0].naturalHeight !== 0) {
+        $img.removeClass('hidden').css('display', 'block');
+    }
     
     const tips = getRecommendationTip(temp, windSpeed, humidity);
     if (Array.isArray(tips)) {
@@ -315,9 +326,20 @@ function previewClothingByTemperature(temperature) {
     $('#recommendation-text').text(recommendationText);
     
     const imageAlt = `${temp}°C 날씨에 맞는 옷차림 추천 이미지 - ${recommendation.text}`;
-    $('#recommendation-image').attr('src', 'assets/images/' + recommendation.image);
-    $('#recommendation-image').attr('alt', imageAlt);
-    $('#recommendation-image').removeClass('hidden');
+    const imageSrc = 'assets/images/' + recommendation.image;
+    const $img = $('#recommendation-image');
+    $img.attr('src', imageSrc);
+    $img.attr('alt', imageAlt);
+    $img.off('load error').on('load', function() {
+        $(this).removeClass('hidden').css('display', 'block');
+    }).on('error', function() {
+        console.error('이미지를 로드할 수 없습니다:', imageSrc);
+        $(this).addClass('hidden');
+    });
+    // 이미지가 이미 캐시에 있는 경우를 대비
+    if ($img[0].complete && $img[0].naturalHeight !== 0) {
+        $img.removeClass('hidden').css('display', 'block');
+    }
     
     setBackgroundByTemperature(temp);
     
