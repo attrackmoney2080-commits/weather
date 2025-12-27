@@ -219,18 +219,51 @@ function displayWeather(weatherData) {
     const imageAlt = `${temp}°C 날씨에 맞는 옷차림 추천 이미지 - ${recommendation.text}`;
     const imageSrc = 'assets/images/' + recommendation.image;
     const $img = $('#recommendation-image');
-    $img.attr('src', imageSrc);
-    $img.attr('alt', imageAlt);
-    $img.off('load error').on('load', function() {
+    
+    // 기존 이벤트 핸들러 제거
+    $img.off('load error');
+    
+    // 이미지 로드 성공 시
+    $img.on('load', function() {
         $(this).removeClass('hidden').css('display', 'block');
-    }).on('error', function() {
+        console.log('이미지 로드 성공:', imageSrc);
+    });
+    
+    // 이미지 로드 실패 시
+    $img.on('error', function() {
         console.error('이미지를 로드할 수 없습니다:', imageSrc);
         $(this).addClass('hidden');
     });
-    // 이미지가 이미 캐시에 있는 경우를 대비
-    if ($img[0].complete && $img[0].naturalHeight !== 0) {
+    
+    // alt 텍스트 먼저 설정
+    $img.attr('alt', imageAlt);
+    
+    // 이미지 표시 함수
+    function showImage() {
         $img.removeClass('hidden').css('display', 'block');
     }
+    
+    // 현재 이미지와 비교
+    const currentSrc = $img.attr('src') || '';
+    if (currentSrc && currentSrc.includes(recommendation.image)) {
+        // 같은 이미지면 이미 로드 확인
+        if ($img[0].complete && $img[0].naturalHeight > 0) {
+            showImage();
+        } else {
+            // 아직 로딩 중이면 이벤트 핸들러가 처리
+            $img.attr('src', imageSrc); // 다시 로드 유도
+        }
+    } else {
+        // 새 이미지 로드
+        $img.attr('src', imageSrc);
+    }
+    
+    // 추가 안전장치: 짧은 시간 후에도 표시되지 않으면 확인
+    setTimeout(function() {
+        if ($img[0].complete && $img[0].naturalHeight > 0 && $img.hasClass('hidden')) {
+            showImage();
+        }
+    }, 300);
     
     const tips = getRecommendationTip(temp, windSpeed, humidity);
     if (Array.isArray(tips)) {
@@ -328,18 +361,51 @@ function previewClothingByTemperature(temperature) {
     const imageAlt = `${temp}°C 날씨에 맞는 옷차림 추천 이미지 - ${recommendation.text}`;
     const imageSrc = 'assets/images/' + recommendation.image;
     const $img = $('#recommendation-image');
-    $img.attr('src', imageSrc);
-    $img.attr('alt', imageAlt);
-    $img.off('load error').on('load', function() {
+    
+    // 기존 이벤트 핸들러 제거
+    $img.off('load error');
+    
+    // 이미지 로드 성공 시
+    $img.on('load', function() {
         $(this).removeClass('hidden').css('display', 'block');
-    }).on('error', function() {
+        console.log('이미지 로드 성공:', imageSrc);
+    });
+    
+    // 이미지 로드 실패 시
+    $img.on('error', function() {
         console.error('이미지를 로드할 수 없습니다:', imageSrc);
         $(this).addClass('hidden');
     });
-    // 이미지가 이미 캐시에 있는 경우를 대비
-    if ($img[0].complete && $img[0].naturalHeight !== 0) {
+    
+    // alt 텍스트 먼저 설정
+    $img.attr('alt', imageAlt);
+    
+    // 이미지 표시 함수
+    function showImage() {
         $img.removeClass('hidden').css('display', 'block');
     }
+    
+    // 현재 이미지와 비교
+    const currentSrc = $img.attr('src') || '';
+    if (currentSrc && currentSrc.includes(recommendation.image)) {
+        // 같은 이미지면 이미 로드 확인
+        if ($img[0].complete && $img[0].naturalHeight > 0) {
+            showImage();
+        } else {
+            // 아직 로딩 중이면 이벤트 핸들러가 처리
+            $img.attr('src', imageSrc); // 다시 로드 유도
+        }
+    } else {
+        // 새 이미지 로드
+        $img.attr('src', imageSrc);
+    }
+    
+    // 추가 안전장치: 짧은 시간 후에도 표시되지 않으면 확인
+    setTimeout(function() {
+        if ($img[0].complete && $img[0].naturalHeight > 0 && $img.hasClass('hidden')) {
+            showImage();
+        }
+    }, 300);
     
     setBackgroundByTemperature(temp);
     

@@ -46,6 +46,12 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+}
+
+/* Navigation */
+nav {
+    position: relative;
 }
 
 .logo {
@@ -63,15 +69,13 @@ header {
 }
 
 /* Navigation Menu */
-nav {
-    position: relative;
-}
-
 .nav-menu {
     display: flex;
     list-style: none;
     gap: 0;
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-menu > li {
@@ -113,6 +117,11 @@ nav {
 }
 
 .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* 모바일에서 활성화된 드롭다운 */
+.dropdown-content.active {
     display: block;
 }
 
@@ -307,27 +316,41 @@ li {
 @media (max-width: 768px) {
     .header-container {
         flex-wrap: wrap;
+        position: relative;
+    }
+    
+    .logo {
+        flex: 1;
     }
 
     .mobile-menu-toggle {
         display: block;
+        order: 2;
+        margin-left: auto;
     }
 
     .nav-menu {
-        display: none;
+        display: none !important;
         width: 100%;
         flex-direction: column;
         position: absolute;
         top: 100%;
         left: 0;
+        right: 0;
         background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         padding: 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        margin-top: 10px;
+        margin-top: 0;
+        z-index: 1001;
     }
 
     .nav-menu.active {
-        display: flex;
+        display: flex !important;
+    }
+    
+    nav {
+        width: 100%;
+        order: 3;
     }
 
     .nav-menu > li {
@@ -341,15 +364,34 @@ li {
 
     .dropdown-content {
         position: static;
-        display: block;
+        display: none !important;
         background-color: rgba(255, 255, 255, 0.1);
         box-shadow: none;
         margin-top: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        padding: 0;
+    }
+
+    .dropdown-content.active {
+        display: block !important;
+        max-height: 500px;
+        padding: 8px 0;
     }
 
     .dropdown-content a {
         color: white;
         padding-left: 40px;
+    }
+    
+    .dropdown > a::after {
+        content: ' ▼';
+        font-size: 0.8em;
+    }
+    
+    .dropdown.active > a::after {
+        content: ' ▲';
     }
 
     h1 {
